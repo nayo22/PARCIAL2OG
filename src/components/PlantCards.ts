@@ -67,6 +67,8 @@ class PlantCard extends HTMLElement {
     }
 }
 
-customElements.define('plant-card', PlantCard);
+if (!customElements.get('plant-card')) {
+    customElements.define('plant-card', PlantCard);
+}
 
 export default PlantCard;

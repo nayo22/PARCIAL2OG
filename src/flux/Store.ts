@@ -1,14 +1,17 @@
 import { AppDispatcher, Action } from './Dispatcher';
-import { CounterActionTypes, StoreActionTypes, PlantActions } from './Actions';
+import { CounterActionTypes, StoreActionTypes, PlantActionTypes } from './Actions';
 
 export type Plant = {
-    name: string;
-    name2: number;
+    commonName: string;
+    scientificName: string;
+    image: string;
 };
 
 export type State = {
     count: number;
-    Plant: Plant | null;
+    Plant: {
+        userGarden: Plant[];
+    };
 };
 
 type Listener = (state: State) => void;
@@ -16,7 +19,9 @@ type Listener = (state: State) => void;
 class Store {
     private _state: State = {
         count: 0,
-        Plant: null,
+        Plant: {
+            userGarden: [],
+        },
     };
 
     private _listeners: Listener[] = [];
@@ -42,20 +47,25 @@ class Store {
         const { type, payload } = action;
 
         if (type === CounterActionTypes.INCREMENT_COUNT && typeof payload === 'number') {
-            this._state = { ...this._state, count: this._state.count + payload };
-        }
-        else if (type === CounterActionTypes.DECREMENT_COUNT && typeof payload === 'number') {
-            this._state = { ...this._state, count: this._state.count - payload };
-        }
-        else if (type === PlantActions.SAVE_PLANT && typeof payload === 'object') {
-            this._state = { ...this._state, Plant: payload as Plant };
-        }
-        else if (type === StoreActionTypes.LOAD_STATE && typeof payload === 'object') {
+            this._state.count += payload;
+        } else if (type === CounterActionTypes.DECREMENT_COUNT && typeof payload === 'number') {
+            this._state.count -= payload;
+        } else if (type === PlantActionTypes.SAVE_PLANT && this._isPlant(payload)) {
+            this._state.Plant.userGarden.push(payload);
+        } else if (type === StoreActionTypes.LOAD_STATE && typeof payload === 'object') {
             this._state = { ...this._state, ...payload };
         }
 
         this._notify();
         this._persist();
+    }
+
+    private _isPlant(payload: unknown): payload is Plant {
+        return typeof payload === 'object' &&
+               payload !== null &&
+               'commonName' in payload &&
+               'scientificName' in payload &&
+               'image' in payload;
     }
 
     private _notify(): void {

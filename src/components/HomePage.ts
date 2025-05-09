@@ -4,7 +4,7 @@ class HomePage extends HTMLElement {
     private render(estadoActual: State = store.getState()): void {
         if (!this.shadowRoot) return;
 
-        const plants = [...estadoActual.Plant.userGarden]; 
+        const plants = [...estadoActual.Plant.userGarden];
         plants.sort((a, b) => a.commonName.localeCompare(b.commonName));
 
         const styles = `
@@ -50,4 +50,6 @@ class HomePage extends HTMLElement {
     }
 }
 
-customElements.define('home-page', HomePage);
+if (!customElements.get('home-page')) {
+    customElements.define('home-page', HomePage);
+}

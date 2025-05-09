@@ -1,14 +1,10 @@
 export interface Action {
     type: string;
-    payload?: object | number | string;
+    payload?: unknown;
 }
 
-export class Dispatcher {
-    private _listeners: Array<(action: Action) => void>;
-
-    constructor() {
-        this._listeners = [];
-    }
+class Dispatcher {
+    private _listeners: Array<(action: Action) => void> = [];
 
     register(callback: (action: Action) => void): void {
         this._listeners.push(callback);
