@@ -36,9 +36,9 @@ export const CounterActions = {
 };
 
 export const PlantActions = {
-    savePlant: (Plant: { name: string; age: number }) => {
+    savePlant: (Plant: { name: string; age: number}) => {
         AppDispatcher.dispatch({
-            type: PlantActiontypes.SAVE_PLANT,
+            type: PlantActions.SAVE_PLANT,
             payload: Plant,
         });
     },
