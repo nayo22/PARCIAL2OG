@@ -1,6 +1,6 @@
 export interface Action {
     type: string;
-    payload?: string;
+    payload?: object | number | string;
 }
 
 export class Dispatcher {
@@ -14,7 +14,7 @@ export class Dispatcher {
         this._listeners.push(callback);
     }
 
-    dispatch(action: any): void {
+    dispatch(action: Action): void {
         for (const listener of this._listeners) {
             listener(action);
         }
